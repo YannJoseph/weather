@@ -1,36 +1,73 @@
-// import axios from "axios";
-import React from "react";
+
+import axios from "axios";
+import React, {useState} from "react";
 
 
 function App() {
 
-  // const url = `https://api.openweathermap.org/data/2.5/weather?q=meaux&appid=c8aaa36c6e4f9ebb93d065f90b33faf0` 
+  const [data, setData] = useState ({});
+  const [location, setLocation] = useState('')
+
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=c8aaa36c6e4f9ebb93d065f90b33faf0` 
+
+const searchLocation = (event) => {
+  if(event.key === 'Enter') {
+  axios.get(url).then((reponse) => {
+    setData(reponse.data)
+    console.log(reponse.data)
+  })
+  setLocation('')
+}
+}
 
   return (
     <div className="app">
+      <div className="search">
+        <input 
+        value={location}
+        onChange={event => setLocation(event.target.value)}
+        placeholder='Enter Location'
+        onKeyPress={searchLocation}
+        type="text" />
+      </div>
  <div className="container">
   <div className="top">
     <div className="location">
-< p>Meaux</p>
+< p>{data.name}</p>
     </div>
     <div className="temp">
-      <h1>14°</h1>
+      {data.main ? <h1>{data.main.temp.toFixed()} °C</h1> : null }
+      
     </div>
     <div className="description">
-      <p>Clouds</p>
+    {data.weather ? <p>{data.weather[0].main} </p>: null}
+   
+     
     </div>
   </div>
-  <div className="bottom">
+
+
+    {data.name != undefined &&
+    <div className="bottom">
     <div className="feels">
-      <p>17°</p>
+    
+      <p className="bold">{data.main ? <p>{data.main.feels_like} °C</p>: null}</p>
+      <p>feels like</p>
     </div>
     <div className="humidity">
-      <p>10%</p>
+      <p className="bold">{data.main ? <p>{data.main.humidity} %</p>: null}</p>
+      <p>Humidity</p>
     </div>
     <div className="wind">
-      8MPH
+      <p className="bold">{data.wind ? <p>{data.wind.speed} MPH</p>:null } </p>
+      <p>Wind speed</p>
     </div>
   </div>
+    }
+
+  
+
+
  </div>
 
     </div>
