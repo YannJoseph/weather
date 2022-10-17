@@ -96,3 +96,15 @@ h1{
 .bold {
     font-weight: 700;
 }
+
+@media query  {
+    .app {
+        min-width: 800px;
+        height: 100%;
+       
+        width: 100%;
+    }
+    .container {
+        height: 95vh;
+    }
+}
